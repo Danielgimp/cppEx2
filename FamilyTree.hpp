@@ -7,8 +7,8 @@ namespace family
 	class Tree
 	{
 	public:
-		string child;
-		string reg;
+		string nodeName;
+		string nodeRelation;
 		string gender;
 		Tree* father;
 		Tree* mother;
@@ -16,8 +16,8 @@ namespace family
 
 		Tree(string name)
 		{
-			this->child = name;
-			this->reg = "me";
+			this->nodeName = name;
+			this->nodeRelation = "me";
 			this->father = nullptr;
 			this->mother = nullptr;
 		}
@@ -28,12 +28,12 @@ namespace family
 		void display();
 		void remove(string name);
 		Tree* findchild(Tree* root, string name);
-		Tree* findreg(Tree* root, string name);
+		Tree* findNodeRelation(Tree* root, string name);
 		void print(Tree* root, int space);
 
 	};
 
-	class err : public std::exception
+	class err : public std::exception //?
 	{
 	public:
 		const char* what() const noexcept { return "error"; }

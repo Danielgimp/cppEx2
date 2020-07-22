@@ -9,15 +9,15 @@ struct err1 : public std::exception {
 
 string Tree::find(string name)
 {
-    Tree* child = findreg(this, name); //how this works?
-    if (child != nullptr)return child->child;
+    Tree* child = findNodeRelation(this, name); //how this works?
+    if (child != nullptr)return child->nodeName;
     throw runtime_error("The tree cannot handle '" +name +"' relation");
     return "";
 }
 
 Tree* Tree::findchild(Tree* root, string name) //how the recursion works?
 {
-    if (root->child == name)
+    if (root->nodeName == name)
     {
         return root;
     }
@@ -35,20 +35,20 @@ Tree* Tree::findchild(Tree* root, string name) //how the recursion works?
     return nullptr;
 }
 
-Tree* Tree::findreg(Tree* root, string reg) //how the recursion works?
+Tree* Tree::findNodeRelation(Tree* root, string reg) //how the recursion works?
 {
-    if (root->reg == reg)
+    if (root->nodeRelation == reg)
     {
         return root;
     }
     if (root->father != nullptr)
     {
-        Tree* ans = findreg(root->father, reg);
+        Tree* ans = findNodeRelation(root->father, reg);
         if (ans != nullptr)
             return ans;
     }
     if (root->mother != nullptr) {
-        Tree* ans = findreg(root->mother, reg);
+        Tree* ans = findNodeRelation(root->mother, reg);
         if (ans != nullptr)
             return ans;
     }
@@ -65,21 +65,21 @@ Tree &Tree::addFather(string childName, string fatherName) //who is son really?
             child->father = new Tree(fatherName);
             child->father->son = child;
             child->father->gender = "male";
-            if (child->reg == "me") child->father->reg = "father";
+            if (child->nodeRelation == "me") child->father->nodeRelation = "father";
             else
-                if (child->reg == "father") child->father->reg = "grandfather";
+                if (child->nodeRelation == "father") child->father->nodeRelation = "grandfather";
                 else
-                    if (child->reg == "grandfather") child->father->reg = "great-grandfather";
+                    if (child->nodeRelation == "grandfather") child->father->nodeRelation = "great-grandfather";
                     else
-                        if (child->reg == "mother") child->father->reg = "grandfather";
+                        if (child->nodeRelation == "mother") child->father->nodeRelation = "grandfather";
                         else
-                            if (child->reg == "grandmother") child->father->reg = "great-grandfather";
+                            if (child->nodeRelation == "grandmother") child->father->nodeRelation = "great-grandfather";
                             else
                             {
-                                string temp = "great-" + child->reg;
+                                string temp = "great-" + child->nodeRelation;
                                 for (int j = 0; j < 6; j++) temp.pop_back(); //what is that really? including for loop
                                 temp += "father";
-                                child->father->reg = temp;
+                                child->father->nodeRelation = temp;
                             }
             return *this;
         }
@@ -105,21 +105,21 @@ Tree &Tree::addMother(string childName, string motherName)
             child->mother = new Tree(motherName);
             child->mother->son = child;
             child->mother->gender = "famale";
-            if (child->reg == "me") child->mother->reg = "mother";
+            if (child->nodeRelation == "me") child->mother->nodeRelation = "mother";
             else
-                if (child->reg == "father") child->mother->reg = "grandmother";
+                if (child->nodeRelation == "father") child->mother->nodeRelation = "grandmother";
                 else
-                    if (child->reg == "grandfather") child->mother->reg = "great-grandmother";
+                    if (child->nodeRelation == "grandfather") child->mother->nodeRelation = "great-grandmother";
                     else
-                        if (child->reg == "mother") child->mother->reg = "grandmother";
+                        if (child->nodeRelation == "mother") child->mother->nodeRelation = "grandmother";
                         else
-                            if (child->reg == "grandmother") child->mother->reg = "great-grandmother";
+                            if (child->nodeRelation == "grandmother") child->mother->nodeRelation = "great-grandmother";
                             else
                             {
-                                string temp = "great-" + child->reg;
+                                string temp = "great-" + child->nodeRelation;
                                 for (int j = 0; j < 6; j++) temp.pop_back();
                                 temp += "mother";
-                                child->mother->reg = temp;
+                                child->mother->nodeRelation = temp;
                             }
             return *this;
 
@@ -139,7 +139,7 @@ string Tree::relation(string name)
 {
     Tree* child = findchild(this, name);
     if (child == nullptr) return "unrelated";
-    return child->reg;
+    return child->nodeRelation;
 }
 
 void Tree::remove(string name)
@@ -163,7 +163,7 @@ void Tree::print(Tree* root, int space) {
     print(root->father, space);
     cout << endl;
     for (int i = 10; i < space; i++) { cout << " "; }
-    cout << root->child << "\n";
+    cout << root->nodeName << "\n";
     print(root->mother, space);
 }
 
